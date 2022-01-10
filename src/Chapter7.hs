@@ -21,21 +21,13 @@ module Chapter7 where
 
 
 
+{- 4.Using foldl , define a function dec2int:: [Int] -> Int that converts a decimal number into
+an integer. For example:
+> newDec2int [2,3,4,5]
+2345
+ -}
 
---mySnoc :: a -> [a] -> [a]
---mySnoc x xs = xs ++ [x]
-
-
---majReverse :: [a] -> [a]
---majReverse [] = []
---majReverse (x:xs) = mySnoc x (majReverse xs)
-
-
---foldek :: [a] -> [a]
---foldek = foldr mySnoc []
-
-foldek :: [a] -> [a]
-foldek = foldr mySnoc []
-       where mySnoc x xs = xs ++ [x]
+newDec2Int :: [Int] -> Int 
+newDec2Int = foldl (\x y -> 10 * x + y) 0
 
 
