@@ -53,3 +53,42 @@ altMap f g (x:y:xs) = f x : g y : altMap f g xs
 --------------------------------------------------------------------------------------------------
 
 
+{- Exercise 0.
+
+Using altMap , define a function luhn :: [Int] -> Bool that implements the Luhn algorithm
+from the exercises in chapter 4 for bank card numbers of any length. Test your new function using
+your own bank card.
+
+
+
+Previous code from chapter4:
+
+luhnDouble :: Int -> Int
+luhnDouble x = if (2 * x) > 9 then (2 * x) - 9 else 2 * x
+
+luhn :: Int -> Int -> Int -> Int -> Bool
+luhn x y z g = if ( (luhnDouble z) + y  +  (luhnDouble x)  + g ) `mod` 10 == 0 then True else False
+
+-}
+
+luhnDouble :: Int -> Int
+luhnDouble x = if (2 * x) > 9 then (2 * x) - 9 else 2 * x
+
+-- Seems like American Express cards are not working for this, why?
+-- Maybe there is a discrepancy between Original Algo and procedure
+-- provided in Chapter4 by prof. Hutton?
+
+
+-- American Express 	371449635398431 --> False?
+-- Diners Club 30569309025904 --> True
+-- Discover 6011111111111117 --> 
+-- JCB 3530111333300000 --> True
+-- MasterCard 5555555555554444 --> True
+-- Visa 4111111111111111 --> True
+
+luhn :: [Int] -> Bool 
+luhn [] = False 
+luhn (x:xs) | sum (altMap luhnDouble id (x:xs)) `mod` 10 == 0 = True 
+              | otherwise = False 
+
+--------------------------------------------------------------------------------------------------
