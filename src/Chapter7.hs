@@ -30,4 +30,20 @@ an integer. For example:
 newDec2Int :: [Int] -> Int 
 newDec2Int = foldl (\x y -> 10 * x + y) 0
 
+--------------------------------------------------------------------------------------------------
 
+{- 
+Exercise 9.
+
+Define a function altMap :: (a -> b) -> (a -> b) -> [a] -> [b] that alternately applies
+its two argument functions to successive elements in a list, in turn about order. For example:
+
+altMap (+10) (+100) [0,1,2,3,4]
+
+Output -> [10,101,12,103,14]
+
+ -}
+
+
+altMap :: (a -> b) -> (a -> b) -> [a] -> [b]
+altMap 
