@@ -21,16 +21,54 @@ module Chapter7 where
 -- Decide if all elements of a list satisfy a predicate:
 -- all :: (a -> Bool) -> [a] -> Bool
 
+-- Different than Hutton's solution
 myAll :: (a -> Bool) -> [a] -> Bool
 myAll f xs = if length [x | x <- (map f xs), x == True] == length (xs) then True else False 
+
 
 -- (b)
 -- Decide if any element of a list satisfies a predicate:
 -- any :: (a -> Bool) -> [a] -> Bool
 
+-- Different than Hutton's solution
 myAny :: (a -> Bool) -> [a] -> Bool
 myAny f xs = if length [x | x <- (map f xs), x == False] == length (xs) then False else True
 
+-- (c)
+-- Select elements from a list while they satisfy a predicate:
+-- takeWhile :: (a -> Bool) -> [a] -> [a]
+
+-- MY IDEA NOT WORKING
+-- myTakeWhile :: (a -> Bool) -> [a] -> [a]
+-- myTakeWhile f [] = [] 
+-- myTakeWhile f (x:y:xs) 
+--     | f x = x : (myTakeWhile f (y:xs))
+--     | otherwise = []
+
+myTakeWhile' :: (a -> Bool) -> [a] -> [a]
+myTakeWhile' f [] = [] 
+myTakeWhile' f [x] = if f x then (x : myTakeWhile' f []) else []
+myTakeWhile' f (x:y:xs) 
+    | f x = x : (myTakeWhile' f (y:xs))
+    | otherwise = []
+
+myTakeWhile :: (a -> Bool) -> [a] -> [a]
+myTakeWhile f [] = [] 
+myTakeWhile f (x:xs)
+    | f x = x : (myTakeWhile f xs)
+    | otherwise = []
+
+
+-- (d)
+-- Remove elements from a list while they satisfy a predicate:
+-- dropWhile :: (a -> Bool) -> [a] -> [a]
+
+
+myDropWhile :: (a -> Bool) -> [a] -> [a]
+myDropWhile f [] = []
+myDropWhile f (x:xs)
+    | f x = myDropWhile f xs
+    | otherwise = (x:xs)
 
 --------------------------------------------------------------------------------------------------
 
