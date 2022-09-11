@@ -1,5 +1,7 @@
 module Chapter7 where
 
+--------------------------------------------------------------------------------------------------
+
 
 -- 1. Show how the list comprehension [f x | x <- xs, p x] can be re-expressed
 -- using the higher-order functions 'map' and 'filter'
@@ -8,33 +10,29 @@ module Chapter7 where
 -- [f x | x <- [1..10], even x] == map f (filter even [1..10])
 -- [f x | x <- xs, p x] == map f (filter p xs)
 
+--------------------------------------------------------------------------------------------------
 
 
 
 -- 2. Without looking at the definitions from the standard prelude, define the
 -- following higher-order library functions on lists.
 
--- a. Decide if all elements of a list satisfy a predicate:
+-- (a) 
+-- Decide if all elements of a list satisfy a predicate:
 -- all :: (a -> Bool) -> [a] -> Bool
--- e.g all even [2, 4, 6, 8] ----> True
-
--- myEven :: Integral a => a -> Bool
--- myEven n = if n `mod` 2 == 0 then True else False
-
--- myEvenLists :: Integral a => [a] -> [Bool]
--- myEvenLists (x:xs) = map myEven (x:xs)
-
--- -- getBoolForAll :: (a -> Bool) -> [a] -> [Bool]
--- -- getBoolForAll f xs =  map f xs
-
--- getBoolForAll :: (a -> Bool) -> [a] -> [Bool]
--- getBoolForAll f xs =  map f xs
-
--- boolFilter :: [Bool] -> Bool
--- boolFilter xs = if length (xs) == length ([x | x <- xs, x == True]) then True else False
 
 myAll :: (a -> Bool) -> [a] -> Bool
 myAll f xs = if length [x | x <- (map f xs), x == True] == length (xs) then True else False 
+
+-- (b)
+-- Decide if any element of a list satisfies a predicate:
+-- any :: (a -> Bool) -> [a] -> Bool
+
+myAny :: (a -> Bool) -> [a] -> Bool
+myAny f xs = if length [x | x <- (map f xs), x == False] == length (xs) then False else True
+
+
+--------------------------------------------------------------------------------------------------
 
 
 {- 4.Using foldl , define a function dec2int:: [Int] -> Int that converts a decimal number into
