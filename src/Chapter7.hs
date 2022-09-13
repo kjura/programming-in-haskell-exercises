@@ -72,6 +72,18 @@ myDropWhile f (x:xs)
 
 --------------------------------------------------------------------------------------------------
 
+{- 3.Redefine the functions map f and filter p using foldr -}
+
+mapu :: (a -> b) -> [a] -> [b]
+mapu f = foldr g []
+    where g = (\x xs -> f x : xs)
+
+filteru :: (a -> Bool) -> [a] -> [a]
+filteru p = foldr g []
+    where g = (\x xs -> if p x then x : xs else xs)
+
+--------------------------------------------------------------------------------------------------
+
 
 {- 4.Using foldl , define a function dec2int:: [Int] -> Int that converts a decimal number into
 an integer. For example:
