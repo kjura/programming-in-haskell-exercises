@@ -91,8 +91,16 @@ an integer. For example:
 2345
  -}
 
+-- foldl version
 newDec2Int :: [Int] -> Int
-newDec2Int = foldl (\x y -> 10 * x + y) 0
+newDec2Int = foldl (\x y -> 10*x + y) 0
+
+-- equivalent, recursive version
+recursiveNewDec2Int :: [Int] -> Int
+recursiveNewDec2Int = recursiveNewDec2Int' 0
+    where 
+        recursiveNewDec2Int' v [] = v
+        recursiveNewDec2Int' v (x:xs) = recursiveNewDec2Int' (x + 10 * v) xs 
 
 --------------------------------------------------------------------------------------------------
 
