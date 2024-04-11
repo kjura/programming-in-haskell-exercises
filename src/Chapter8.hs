@@ -125,24 +125,20 @@ data TreeDataOnlyInLeaves a = LeafData a | NodeWithoutData (TreeDataOnlyInLeaves
 -- https://www.geeksforgeeks.org/write-a-c-program-to-get-count-of-leaf-nodes-in-a-binary-tree/
 getNumberOfLeaves :: Integral a => TreeDataOnlyInLeaves a -> a
 getNumberOfLeaves (LeafData n) = 1
-getNumberOfLeaves (NodeWithoutData (LeafData l) (LeafData r)) = 2
-getNumberOfLeaves (NodeWithoutData (LeafData l) r) = 1 + (getNumberOfLeaves r)
-getNumberOfLeaves (NodeWithoutData l (LeafData r)) = (getNumberOfLeaves l) + 1
 getNumberOfLeaves (NodeWithoutData leftNode rightNode) = (getNumberOfLeaves (leftNode)) + (getNumberOfLeaves (rightNode)) 
--- Just for fun, implement a function that converts [Int] -> TreeDataOnlyInLeaves
+-- TODO: Just for fun, implement a function that converts [Int] -> TreeDataOnlyInLeaves
 
--- balanced :: TreeDataOnlyInLeaves a -> Bool
--- balanced 
+balanced :: Integral a => TreeDataOnlyInLeaves a -> Bool
+balanced (LeafData a) = True
+balanced (NodeWithoutData left_node right_node) = abs (getNumberOfLeaves (left_node) - getNumberOfLeaves (right_node)) <= 1 && balanced (left_node) && balanced (right_node)
 
--- getNumberOfLeaves ()
+
 -- NodeWithoutData (NodeWithoutData (LeafData 6) (LeafData 9)) (NodeWithoutData (LeafData 4) (LeafData 2))
 -- getNumberOfLeaves (LeafData 3)
 -- getNumberOfLeaves (NodeWithoutData (LeafData 6) (LeafData 9))
 -- NodeWithoutData (NodeWithoutData (NodeWithoutData (LeafData 6) ))
 -- myCuteTree = 
 -- NodeWithoutData (NodeWithoutData (LeafData 6) (NodeWithoutData (LeafData 7) (LeafData 9))) (LeafData 3) 
-
-
 
 
 -----------------------------------------------------------------------------------------------------------------------
