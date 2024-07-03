@@ -142,3 +142,23 @@ balanced (NodeWithoutData left_node right_node) = abs (getNumberOfLeaves (left_n
 
 
 -----------------------------------------------------------------------------------------------------------------------
+
+{-
+
+8.9.4
+
+Define a function balance :: [a] -> Tree a that converts a non-empty list into a balanced tree.
+Hint: first define a function that splits a list into two halves whose length differs by at most one.
+
+
+-}
+
+-- We cut off everything after a dot, e.g 2.5 --> 2, 3.5 --> 3, taking only the integer part
+splits :: [a] -> ([a], [a])
+splits [] = ([], [])
+splits xs = splitAt (div (length xs) 2) xs
+
+balanceTree :: [a] -> TreeDataOnlyInLeaves a
+balanceTree [] = error "The list cannot be empty!"
+balanceTree [e] = LeafData e -- Trivially balanced Leaf
+balanceTree (x:xs) = LeafData x
