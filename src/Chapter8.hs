@@ -125,12 +125,12 @@ data TreeDataOnlyInLeaves a = LeafData a | NodeWithoutData (TreeDataOnlyInLeaves
 -- https://www.geeksforgeeks.org/write-a-c-program-to-get-count-of-leaf-nodes-in-a-binary-tree/
 getNumberOfLeaves :: Integral a => TreeDataOnlyInLeaves a -> a
 getNumberOfLeaves (LeafData n) = 1
-getNumberOfLeaves (NodeWithoutData leftNode rightNode) = (getNumberOfLeaves (leftNode)) + (getNumberOfLeaves (rightNode)) 
+getNumberOfLeaves (NodeWithoutData leftNode rightNode) = getNumberOfLeaves leftNode + getNumberOfLeaves rightNode
 -- TODO: Just for fun, implement a function that converts [Int] -> TreeDataOnlyInLeaves
 
 balanced :: Integral a => TreeDataOnlyInLeaves a -> Bool
 balanced (LeafData a) = True
-balanced (NodeWithoutData left_node right_node) = abs (getNumberOfLeaves (left_node) - getNumberOfLeaves (right_node)) <= 1 && balanced (left_node) && balanced (right_node)
+balanced (NodeWithoutData left_node right_node) = abs (getNumberOfLeaves left_node - getNumberOfLeaves right_node) <= 1 && balanced left_node && balanced right_node
 
 
 -- NodeWithoutData (NodeWithoutData (LeafData 6) (LeafData 9)) (NodeWithoutData (LeafData 4) (LeafData 2))
@@ -160,5 +160,7 @@ splits xs = splitAt (div (length xs) 2) xs
 
 balanceTree :: [a] -> TreeDataOnlyInLeaves a
 balanceTree [] = error "The list cannot be empty!"
-balanceTree [e] = LeafData e -- Trivially balanced Leaf
-balanceTree (x:xs) = LeafData x
+balanceTree [e] = LeafData e -- Trivially balanced Leaf e
+balanceTree xs =  NodeWithoutData (balanceTree $ fst splitted) (balanceTree $ snd splitted) -- continuously split list and apply 
+    where
+        splitted = splits xs
