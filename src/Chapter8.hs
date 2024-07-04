@@ -164,3 +164,25 @@ balanceTree [e] = LeafData e -- Trivially balanced Leaf e
 balanceTree xs =  NodeWithoutData (balanceTree $ fst splitted) (balanceTree $ snd splitted) -- continuously split list and apply 
     where
         splitted = splits xs
+
+-----------------------------------------------------------------------------------------------------------------------
+
+{-
+
+8.9.5
+
+Given the type declaration
+data Expr = Val Int | Add Expr Expr
+
+define a higher-order function folde :: (Int -> a) -> (a -> a -> a) -> Expr -> a
+such that folde f g replaces each Val constructor in an expression by the function f, and each
+Add constructor by the function g.
+
+-}
+
+data Expr = Val Int | Add Expr Expr
+    deriving Show
+
+folde :: (Int -> a) -> (a -> a -> a) -> Expr -> a
+folde f g (Val m) = f m
+folde f g (Add exprA exprB) = g (folde f g exprA) (folde f g exprB)
