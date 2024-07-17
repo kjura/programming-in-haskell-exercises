@@ -66,7 +66,7 @@ data List a = Nil | Cons a (List a)
 
 myLen :: List a -> Int
 myLen Nil = 0
-myLen (Cons _ xs) = 1 + myLen xs 
+myLen (Cons _ xs) = 1 + myLen xs
 
 
 data Tree a = Leaf a | Node (Tree a) a (Tree a)
@@ -186,3 +186,33 @@ data Expr = Val Int | Add Expr Expr
 folde :: (Int -> a) -> (a -> a -> a) -> Expr -> a
 folde f g (Val m) = f m
 folde f g (Add exprA exprB) = g (folde f g exprA) (folde f g exprB)
+
+
+
+{-
+
+8.9.6. 
+
+Using folde, define a function eval :: Expr -> Int that evaluates an expression to an integer
+value, and a function size :: Expr -> Int that calculates the number of values in an expression.
+
+-}
+
+
+eval :: Expr -> Int
+eval = folde id (+)
+
+size :: Expr -> Int
+size = folde (const 1) (+)
+
+-- This is without using folde, simpler in my opinion
+-- size (Val m) = 1
+-- size (Add exprA exprB) = size exprA + size exprB
+-- example with book version
+-- size (Add (Add (Val 6) (Val 7)) (Val 9)) =
+-- = folde (const 1) (+) (Add (Add (Val 6) (Val 7)) (Val 9)) =
+    -- = (+) (folde (const 1) (+) (Add (Val 6) (Val 7)) (folde (const 1) (+) (Val 9)) =
+        --  = (+) (folde (const 1) (+) (Add (Val 6) (Val 7)) (folde (const 1) (+) (Val 9))
+        -- = (+) (folde (const 1) (+) (Add (Val 6) (Val 7)) (1)
+        -- = (+) ((+) (folde const 1 Val 6) (folde const 1 Val 7)) (1)
+        -- = (+) ((+) const 1 Val6 const 1 Val7) (1) = (+) ((+) 1 1) (1) = 3
