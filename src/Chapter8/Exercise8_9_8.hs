@@ -95,3 +95,19 @@ bools 2 = map (reverse . map conv . make 3 . int2bin) [0, 1, 2, 3]
 = [(reverse . map conv . make 2 . int2bin) 0, (reverse . map conv . make 2 . int2bin) 1, (reverse . map conv . make 2 . int2bin) 2, (reverse . map conv . make 2 . int2bin) 3]
 
 -}
+
+simpleBools :: Int -> [[Bool]]
+simpleBools 0 = [[]]
+simpleBools n = map (False :) bss ++ map (True :) bss
+    where bss = simpleBools (n - 1)
+
+-- example
+-- simpleBools 2 = 
+--             map (False :) simpleBools (1) ++ map (True :) simpleBools (1) =
+--             = map (False :) ( map (False :) simpleBools (0) ++ map (True :) simpleBools (0)
+--  ) ++ map (True :) ( map (False :) simpleBools (0) ++ map (True :) simpleBools (0)
+--  )          = map (False :) ( map (False :) [[]] ++ map (True :) [[]]
+--  ) ++ map (True :) ( map (False :) [[]] ++ map (True :) [[]]
+--  ) = map (False :) ( [[False]] ++ [[True]] ) ++ map (True :) ( ( [[False]] ++ [[True]] ) )
+--  = [[False, False], [False, True]] ++ [[True, False], [True, True]]
+--  = [[False, False], [False, True], [True, False], [True, True]]
