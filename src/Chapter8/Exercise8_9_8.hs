@@ -111,3 +111,20 @@ simpleBools n = map (False :) bss ++ map (True :) bss
 --  ) = map (False :) ( [[False]] ++ [[True]] ) ++ map (True :) ( ( [[False]] ++ [[True]] ) )
 --  = [[False, False], [False, True]] ++ [[True, False], [True, True]]
 --  = [[False, False], [False, True], [True, False], [True, True]]
+
+rmdups :: Eq a => [a] -> [a]
+rmdups [] = []
+rmdups (x:xs) = x : filter (/= x) (rmdups xs)
+
+
+substs :: Proposition -> [Substitution]
+substs p = map (zip vs) (bools (length vs))
+    where vs = rmdups (variablesInTheProposition p)
+
+-- variablesInTheProposition (Imply (Not (Var 'A')) (And (Var 'B') (Var 'B')))
+--  map (zip "AB") [[False,False],[False,True],[True,False],[True,True]]
+-- = [(zip "AB") [False,False], (zip "AB") [False,True], (zip "AB") [True,False], (zip "AB") [True,True]]
+-- = [[('A',False),('B',False)],[('A',False),('B',True)],[('A',True),('B',False)],[('A',True),('B',True)]]
+
+isTaut :: Proposition -> Bool
+isTaut prop = and [eval sub prop | sub <- substs prop]
