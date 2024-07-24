@@ -68,3 +68,30 @@ bools n = map (reverse . map conv . make n . int2bin) range
         conv 0 = False
         conv 1 = True
         conv _ = False
+
+{- 
+
+bools 1 = [(reverse . map conv . make n . int2bin) 0, (reverse . map conv . make n . int2bin) 1]
+= []
+
+remeber that bools 1 when evaluating for 0 we have => take 1 ([] ++ repeat 0) = [0]
+n = 1 for make n bs
+
+bools 3 = map (reverse . map conv . make 3 . int2bin) [0..(2^n)-1] =
+= map (reverse . map conv . make 3 . int2bin) [0..7] = 
+= map ( reverse ( map conv ( make 3 ( int2bin ) ) ) ) [0..7]
+= [( reverse ( map conv ( make 3 ( int2bin ) ) ) ) 0, ( reverse ( map conv ( make 3 ( int2bin ) ) ) ) 1, ( reverse ( map conv ( make 3 ( int2bin ) ) ) ) 2, ... ]
+
+(.)(0) --> ( reverse ( map conv ( make 3 ( int2bin 0) ) ) ) = ( reverse ( map conv ( make 3 ( []) ) ) ) 
+= ( reverse ( map conv ( take 3 ([] ++ repeat 0) ) ) ) = ( reverse ( map conv ( take 3 ([] ++ repeat 0) ) ) )
+
+= ( reverse ( map conv [0, 0, 0] ) ) = reverse ( [conv 0, conv 0, conv 0] ) = reverse ( [False, False, False] )
+= [False, False, False]
+
+(.)(0) --> bools 1 = [(reverse . map conv . make n . int2bin) 0, (reverse . map conv . make n . int2bin) 1]
+= 
+
+bools 2 = map (reverse . map conv . make 3 . int2bin) [0, 1, 2, 3]
+= [(reverse . map conv . make 2 . int2bin) 0, (reverse . map conv . make 2 . int2bin) 1, (reverse . map conv . make 2 . int2bin) 2, (reverse . map conv . make 2 . int2bin) 3]
+
+-}
