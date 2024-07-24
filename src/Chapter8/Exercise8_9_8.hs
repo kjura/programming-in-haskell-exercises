@@ -21,6 +21,7 @@ data Proposition = Const Bool
                 | Not Proposition
                 | And Proposition Proposition
                 | Imply Proposition Proposition
+                | Or Proposition Proposition
 
 
 -- Values for tests
@@ -36,12 +37,20 @@ p3 = Imply (Var 'A') (And (Var 'A') (Var 'B'))
 p4 :: Proposition
 p4 = Imply (And (Var 'A') (Imply (Var 'A') (Var 'B'))) (Var 'B')
 
+lawOfTheExcludedMiddle :: Proposition
+lawOfTheExcludedMiddle = Or (Var 'A') (Var 'B')
+
+lawOfNoncontradiction :: Proposition
+lawOfNoncontradiction = Not (And (Var 'p') (Not (Var 'p')))
+
+
 
 eval :: Substitution -> Proposition -> Bool
 eval _ (Const b) = b
 eval sub (Var c) = find c sub
 eval sub (Not prop) = not (eval sub prop)
 eval sub (And a b) = eval sub a && eval sub b
+eval sub (Or a b) = eval sub a || eval sub b
 eval sub (Imply a b) = eval sub a <= eval sub b -- Still kinda mysterious el-oh-el
 {-  
 eval [('A', True), ('B', False), ('E', True)] Imply (Var 'A') (And (Var 'A') (Var 'B'))
@@ -56,7 +65,8 @@ variablesInTheProposition :: Proposition -> [Char]
 variablesInTheProposition (Const _) = []
 variablesInTheProposition (Var b) = [b]
 variablesInTheProposition (Not prop) = variablesInTheProposition prop
-variablesInTheProposition (And propA propB) = variablesInTheProposition propA ++ variablesInTheProposition propB 
+variablesInTheProposition (And propA propB) = variablesInTheProposition propA ++ variablesInTheProposition propB
+variablesInTheProposition (Or propA propB) = variablesInTheProposition propA ++ variablesInTheProposition propB
 variablesInTheProposition (Imply propA propB) = variablesInTheProposition propA ++ variablesInTheProposition propB
 
 
@@ -128,3 +138,4 @@ substs p = map (zip vs) (bools (length vs))
 
 isTaut :: Proposition -> Bool
 isTaut prop = and [eval sub prop | sub <- substs prop]
+-- Or (Var 'p') (Not (Var 'p'))
