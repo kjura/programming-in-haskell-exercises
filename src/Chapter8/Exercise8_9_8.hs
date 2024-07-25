@@ -22,6 +22,7 @@ data Proposition = Const Bool
                 | And Proposition Proposition
                 | Imply Proposition Proposition
                 | Or Proposition Proposition
+                | Equiv Proposition Proposition
 
 
 -- Values for tests
@@ -36,6 +37,9 @@ p3 = Imply (Var 'A') (And (Var 'A') (Var 'B'))
 
 p4 :: Proposition
 p4 = Imply (And (Var 'A') (Imply (Var 'A') (Var 'B'))) (Var 'B')
+
+p5 :: Proposition
+p5 = Equiv (Or (And (Var 'p') (Var 'q')) (Var 'r')) (And (Or (Var 'p') (Var 'r')) (Or (Var 'q') (Var 'r')))
 
 lawOfTheExcludedMiddle :: Proposition
 lawOfTheExcludedMiddle = Or (Var 'A') (Var 'B')
@@ -52,6 +56,8 @@ eval sub (Not prop) = not (eval sub prop)
 eval sub (And a b) = eval sub a && eval sub b
 eval sub (Or a b) = eval sub a || eval sub b
 eval sub (Imply a b) = eval sub a <= eval sub b -- Still kinda mysterious el-oh-el
+eval sub (Equiv a b) = eval sub (Imply a b) && eval sub (Imply b a)
+
 {-  
 eval [('A', True), ('B', False), ('E', True)] Imply (Var 'A') (And (Var 'A') (Var 'B'))
 
@@ -67,6 +73,7 @@ variablesInTheProposition (Var b) = [b]
 variablesInTheProposition (Not prop) = variablesInTheProposition prop
 variablesInTheProposition (And propA propB) = variablesInTheProposition propA ++ variablesInTheProposition propB
 variablesInTheProposition (Or propA propB) = variablesInTheProposition propA ++ variablesInTheProposition propB
+variablesInTheProposition (Equiv propA propB) = variablesInTheProposition propA ++ variablesInTheProposition propB
 variablesInTheProposition (Imply propA propB) = variablesInTheProposition propA ++ variablesInTheProposition propB
 
 
